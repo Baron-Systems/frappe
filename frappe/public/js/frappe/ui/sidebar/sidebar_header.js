@@ -84,12 +84,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					icon: is_dark ? "sun" : "moon",
 				},
 				{
-					name: "help",
-					label: "Help",
-					icon: "info",
-					items: this.get_help_siblings(),
-				},
-				{
 					is_divider: true,
 				},
 				{
@@ -213,6 +207,12 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		help_dropdown_items = custom_help_links.concat(help_dropdown_items);
 
 		navbar_settings.help_dropdown.forEach((element) => {
+			if (
+				element.item_label === "Frappe Support" ||
+				(element.route && element.route.includes("frappe.io/support"))
+			) {
+				return;
+			}
 			let dropdown_children = {
 				name: element.name,
 				label: element.item_label,

@@ -637,7 +637,7 @@
    "fieldname": "desk_theme",
    "fieldtype": "Select",
    "label": "Desk Theme",
-   "options": "Light\nDark\nAutomatic"
+   "options": "Light\nDark\nSky Blue\nAutomatic"
   },
   {
    "fieldname": "module_profile",

@@ -151,7 +151,7 @@ def send_login_link(email: str):
 		link = _generate_temporary_login_link(email, expiry)
 
 		app_name = (
-			frappe.get_website_settings("app_name") or frappe.get_system_settings("app_name") or _("Frappe")
+			frappe.get_website_settings("app_name") or frappe.get_system_settings("app_name") or _("AL Baron Systems")
 		)
 
 		subject = _("Login To {0}").format(app_name)

@@ -107,7 +107,7 @@ body[data-route^="Form"] {
 	overflow: hidden;
 	@include card($padding: 0px);
 	box-shadow: none;
-	border: none;
+	border: 1px solid var(--border-color);
 }
 
 .page-head {

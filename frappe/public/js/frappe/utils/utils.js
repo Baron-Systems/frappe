@@ -2156,6 +2156,12 @@ Object.assign(frappe.utils, {
 		help_dropdown_items = custom_help_links.concat(help_dropdown_items);
 
 		navbar_settings.help_dropdown.forEach((element) => {
+			if (
+				element.item_label === "Frappe Support" ||
+				(element.route && element.route.includes("frappe.io/support"))
+			) {
+				return;
+			}
 			let dropdown_children = {
 				name: element.name,
 				label: element.item_label,

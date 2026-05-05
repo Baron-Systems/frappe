@@ -56,7 +56,7 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 			this.themes = [
 				{
 					name: "light",
-					label: __("Frappe Light"),
+					label: __("Light"),
 					info: __("Light Theme"),
 				},
 				{
@@ -65,13 +65,12 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 					info: __("Dark Theme"),
 				},
 				{
-					name: "automatic",
-					label: __("Automatic"),
-					info: __("Uses system's theme to switch between light and dark mode"),
-				},
+				name: "sky blue",
+				label: __("Sky Blue"),
+				info: __("Sky Blue Theme"),
+			},
 			];
-
-			resolve(this.themes);
+			resolve();
 		});
 	}
 
@@ -86,11 +85,11 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 	get_preview_html(theme) {
 		const is_auto_theme = theme.name === "automatic";
 		const preview = $(`<div class="${this.current_theme == theme.name ? "selected" : ""}">
-			<div data-theme=${is_auto_theme ? "light" : theme.name}
+			<div data-theme="${is_auto_theme ? "light" : theme.name}"
 				data-is-auto-theme="${is_auto_theme}" title="${theme.info}">
 				<div class="background">
 					<div>
-						<div class="preview-check" data-theme=${is_auto_theme ? "dark" : theme.name}>
+						<div class="preview-check" data-theme="${is_auto_theme ? "dark" : theme.name}">
 							${frappe.utils.icon("tick", "xs")}
 						</div>
 					</div>
@@ -129,8 +128,9 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 		document.documentElement.setAttribute("data-theme-mode", this.current_theme);
 		frappe.show_alert(__("Theme Changed"), 3);
 
+		const theme_title = this.current_theme === "sky blue" ? "Sky Blue" : toTitle(this.current_theme);
 		frappe.xcall("frappe.core.doctype.user.user.switch_theme", {
-			theme: toTitle(theme),
+			theme: theme_title,
 		});
 	}
 

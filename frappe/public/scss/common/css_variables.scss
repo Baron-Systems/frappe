@@ -22,7 +22,7 @@ $disabled-input-height: 22px;
 	--page-max-width: 900px;
 
 	--modal-shadow: var(--shadow-md);
-	--card-shadow: var(--shadow-sm);
+	--card-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
 	--btn-shadow: var(--shadow-xs);
 
 	// navbar
@@ -83,7 +83,7 @@ $disabled-input-height: 22px;
 	--subtle-fg: var(--gray-100);
 	--navbar-bg: var(--neutral);
 	--fg-hover-color: var(--gray-100);
-	--card-bg: var(--fg-color);
+	--card-bg: var(--gray-50);
 	--disabled-text-color: var(--gray-600);
 	--disabled-control-bg: var(--gray-50);
 	--control-bg: var(--gray-100);
@@ -111,8 +111,8 @@ $disabled-input-height: 22px;
 	--scrollbar-track-color: var(--gray-200);
 
 	--shadow-inset: inset 0px -1px 0px var(--gray-300);
-	--border-color: var(--gray-200);
-	--dark-border-color: var(--gray-300);
+	--border-color: var(--gray-300);
+	--dark-border-color: var(--gray-400);
 	--table-border-color: var(--gray-200);
 	--highlight-color: var(--gray-50);
 	--yellow-highlight-color: var(--yellow-50);

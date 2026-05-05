@@ -115,9 +115,14 @@
     padding: 13px 16px 12px 16px;
     position: relative;
     border-radius: 20px;
-    border-width: 1px;
-    border-style: dashed;
-    border-color: transparent;
+    border: 1px solid var(--blue-100);
+    background-color: var(--bg-light-blue);
+    box-shadow: 0 18px 36px rgba(38, 108, 255, 0.10);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.desktop-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 42px rgba(38, 108, 255, 0.14);
 }
 .desktop-icon.desktop-edit-mode .hide-button {
     display: flex;
@@ -144,9 +149,11 @@
     justify-content: center;
     width: var(--desktop-icon-dimension);
     height: var(--desktop-icon-dimension);
+    background-color: rgba(56, 132, 255, 0.08);
+    border: 1px solid rgba(56, 132, 255, 0.18);
 }
 .icon-container:has(.icon){
-    background-color: var(--surface-gray-3);
+    background-color: rgba(56, 132, 255, 0.08);
 }
 .icon-container:hover{
 	transform: scale(1.05);
@@ -167,6 +174,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
     line-height: var(--desktop-icon-line-height);
+    color: var(--text-on-dark-blue);
 }
 .icon-subtitle{
     font-weight: var(--weight-regular);

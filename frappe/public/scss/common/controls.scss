@@ -179,6 +179,25 @@ select.form-control {
 			padding: var(--padding-sm);
 		}
 	}
+
+	.frappe-control .control-input input,
+	.frappe-control .control-input textarea,
+	.frappe-control .control-input select,
+	.frappe-control input,
+	.frappe-control textarea,
+	.frappe-control select,
+	.frappe-control .form-control,
+	.frappe-control textarea.form-control,
+	.frappe-control select.form-control,
+	input.form-control,
+	textarea.form-control,
+	select.form-control {
+		border: 1px solid var(--blue-300) !important;
+		border-radius: var(--border-radius-sm) !important;
+		background-color: var(--bg-light-blue) !important;
+		box-shadow: inset 0 0 0 1px var(--blue-300) !important;
+	}
+
 	.contact-box p {
 		line-height: 1.1;
 	}

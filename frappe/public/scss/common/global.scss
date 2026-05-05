@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap");
 @import "../element/checkbox";
 @import "../element/radio";
 
@@ -42,7 +43,6 @@ body {
 
 .frappe-card {
 	@include card();
-	box-shadow: none;
 	border: 1px solid var(--border-color);
 }
 

@@ -456,13 +456,6 @@ class DesktopPage {
 				},
 			},
 			{
-				icon: "support",
-				label: "Frappe Support",
-				onClick: function () {
-					window.open("https://support.frappe.io/help", "_blank");
-				},
-			},
-			{
 				icon: "rotate-ccw",
 				label: "Reset Desktop Layout",
 				onClick: function () {

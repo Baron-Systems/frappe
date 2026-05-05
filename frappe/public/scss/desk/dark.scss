@@ -269,3 +269,133 @@ $check-icon-dark: url("data:image/svg+xml, <svg viewBox='0 0 8 7' fill='none' xm
 		}
 	}
 }
+
+[data-theme="sky blue"] {
+	--brand-color: var(--primary);
+
+	--text-neutral: var(--gray-900);
+	--text-dark: var(--gray-800);
+	--text-muted: var(--gray-600);
+	--text-light: var(--gray-500);
+	--text-color: var(--gray-900);
+	--heading-color: var(--gray-900);
+
+	--icon-fill: transparent;
+	--icon-stroke: var(--blue-800);
+
+	--bg-color: #f8fbff;
+	--fg-color: white;
+	--subtle-accent: #e6f3ff;
+	--subtle-fg: var(--blue-100);
+	--navbar-bg: var(--blue-50);
+	--fg-hover-color: var(--blue-100);
+	--card-bg: white;
+	--disabled-text-color: var(--gray-500);
+	--disabled-control-bg: var(--blue-50);
+	--control-bg: var(--blue-50);
+	--control-bg-on-gray: var(--blue-100);
+	--awesomebar-focus-bg: white;
+	--modal-bg: white;
+	--toast-bg: white;
+	--popover-bg: white;
+
+	--awesomplete-hover-bg: var(--blue-50);
+	--btn-default-bg: var(--blue-50);
+	--btn-default-hover-bg: var(--blue-100);
+	--btn-ghost-hover-bg: var(--blue-100);
+	--btn-primary: var(--blue-800);
+
+	--border-primary: var(--blue-800);
+	--sidebar-select-color: var(--blue-100);
+
+	--scrollbar-thumb-color: var(--blue-200);
+	--scrollbar-track-color: var(--blue-50);
+
+	--shadow-inset: inset 0px -1px 0px rgba(62, 132, 217, 0.15);
+	--border-color: var(--blue-100);
+	--dark-border-color: var(--blue-200);
+	--table-border-color: var(--blue-100);
+	--highlight-color: #e6f3ff;
+	--yellow-highlight-color: var(--yellow-50);
+	--placeholder-color: var(--blue-200);
+	--primary-color: var(--blue-800);
+	--highlight-shadow: 1px 1px 10px rgba(56, 137, 255, 0.15), 0px 0px 4px rgba(62, 132, 217, 0.3);
+
+	--progress-bar-bg: var(--blue-200);
+	--date-active-text: var(--white);
+	--date-active-bg: var(--blue-700);
+	--date-range-bg: var(--blue-100);
+
+	--diff-changed: var(--blue-200);
+
+	.page-title .sidebar-toggle-btn {
+		--icon-stroke: var(--blue-700);
+	}
+
+	.grid-body .editable-row {
+		--control-bg: var(--blue-50);
+		--input-disabled-bg: var(--blue-50);
+	}
+
+	.frappe-card {
+		.btn-default {
+			background-color: var(--control-bg);
+
+			&:hover {
+				background-color: var(--fg-hover-color);
+			}
+		}
+	}
+
+	.modal,
+	.form-in-grid {
+		--control-bg: var(--blue-50);
+		--border-color: var(--blue-100);
+	}
+
+	.print-format {
+		--text-color: var(--gray-900);
+		--border-color: var(--blue-100);
+	}
+
+	.ql-editor {
+		color: var(--text-color);
+		&.read-mode {
+			span:not(.mention),
+			p,
+			u,
+			strong {
+				background-color: inherit !important;
+				color: inherit !important;
+			}
+		}
+	}
+	.comment-input-wrapper .ql-editor.ql-blank::before {
+		color: var(--text-color);
+	}
+
+	.rating {
+		--star-fill: var(--blue-500);
+		.star-hover {
+			--star-fill: var(--blue-400);
+		}
+	}
+
+	--skeleton-bg: var(--blue-50);
+
+	--right-arrow-svg: url("data: image/svg+xml;utf8, <svg width='6' height='8' viewBox='0 0 6 8' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M1.25 7.5L4.75 4L1.25 0.5' stroke='%231f4ea3' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+	--left-arrow-svg: url("data: image/svg+xml;utf8, <svg width='6' height='8' viewBox='0 0 6 8' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7.5 9.5L4 6l3.5-3.5' stroke='%231f4ea3' stroke-linecap='round' stroke-linejoin='round'></path></svg>");
+
+	::selection {
+		color: var(--text-color);
+		background: var(--blue-100);
+	}
+
+	$indicator-colors: green, cyan, blue, orange, yellow, gray, grey, red, pink, darkgrey, purple,
+		light-blue;
+	@each $color in $indicator-colors {
+		.indicator {
+			--indicator-dot-#{"" + $color}: var(--bg-#{$color});
+		}
+	}
+}
