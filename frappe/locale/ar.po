@@ -918,7 +918,7 @@ msgstr ""
 #: frappe/workflow/doctype/workflow_transition/workflow_transition.json
 #: frappe/workflow/page/workflow_builder/workflow_builder.js:37
 msgid "Action"
-msgstr ""
+msgstr "الإجراء"
 
 #. Label of the action (Small Text) field in DocType 'DocType Action'
 #: frappe/core/doctype/doctype_action/doctype_action.json
@@ -987,7 +987,7 @@ msgstr ""
 #: frappe/public/js/frappe/views/reports/query_report.js:214
 #: frappe/public/js/frappe/views/reports/query_report.js:853
 msgid "Actions"
-msgstr ""
+msgstr "الإجراءات"
 
 #. Label of the activate (Check) field in DocType 'Package Import'
 #: frappe/core/doctype/package_import/package_import.json
@@ -1053,7 +1053,7 @@ msgstr "سجل النشاط"
 #: frappe/public/js/frappe/views/reports/query_report.js:294
 #: frappe/public/js/frappe/widgets/widget_dialog.js:30
 msgid "Add"
-msgstr ""
+msgstr "اضف"
 
 #: frappe/public/js/frappe/form/grid_row.js:454
 msgid "Add / Remove Columns"
@@ -1329,12 +1329,12 @@ msgstr ""
 
 #: frappe/public/js/frappe/views/kanban/kanban_column.html:20
 msgid "Add {0}"
-msgstr ""
+msgstr "اضف {0}"
 
 #: frappe/public/js/frappe/list/list_view.js:289
 msgctxt "Primary action in list view"
 msgid "Add {0}"
-msgstr ""
+msgstr "اضف {0}"
 
 #. Option for the 'Status' (Select) field in DocType 'Permission Log'
 #: frappe/core/doctype/permission_log/permission_log.json
@@ -8192,7 +8192,7 @@ msgstr "تاريخ الاستحقاق بناء على"
 #: frappe/public/js/frappe/form/grid_row_form.js:44
 #: frappe/public/js/frappe/form/toolbar.js:455
 msgid "Duplicate"
-msgstr ""
+msgstr "تكرار"
 
 #: frappe/printing/doctype/print_format_field_template/print_format_field_template.py:53
 msgid "Duplicate Entry"
@@ -15019,7 +15019,7 @@ msgstr "إعدادات القائمة"
 
 #: frappe/public/js/frappe/list/base_list.js:203
 msgid "List View"
-msgstr ""
+msgstr "قائمة"
 
 #. Name of a DocType
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
@@ -22672,7 +22672,7 @@ msgstr ""
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:15
 #: frappe/public/js/workflow_builder/workflow_builder.bundle.js:33
 msgid "Save"
-msgstr ""
+msgstr "حفظ"
 
 #: frappe/workflow/doctype/workflow/workflow.js:143
 msgid "Save Anyway"
@@ -22685,7 +22685,7 @@ msgstr "حفظ باسم"
 
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:63
 msgid "Save Customizations"
-msgstr ""
+msgstr "حفظ التخصيصات"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1990
 msgid "Save Report"
@@ -22714,7 +22714,7 @@ msgstr "حفظ"
 
 #: frappe/public/js/frappe/list/list_filter.js:20
 msgid "Saved Filters"
-msgstr ""
+msgstr "تصفيات محفوظة"
 
 #: frappe/public/js/frappe/list/list_settings.js:41
 #: frappe/public/js/frappe/views/kanban/kanban_settings.js:47
@@ -27469,7 +27469,7 @@ msgstr "الاجمالي غير شامل الضريبة:"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1252
 msgid "Totals"
-msgstr ""
+msgstr "الاجمالي"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1227
 msgid "Totals Row"
@@ -29021,7 +29021,7 @@ msgstr "رابط الفيديو"
 #. Label of the view_name (Select) field in DocType 'Form Tour'
 #: frappe/desk/doctype/form_tour/form_tour.json
 msgid "View"
-msgstr ""
+msgstr "عرض"
 
 #: frappe/core/doctype/success_action/success_action.js:60
 #: frappe/public/js/frappe/form/success_action.js:89
@@ -32279,3 +32279,5 @@ msgstr ""
 msgid "← Back to upload files"
 msgstr ""
 
+msgid "Add row"
+msgstr "إضافة صف"
