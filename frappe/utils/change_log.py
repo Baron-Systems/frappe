@@ -337,6 +337,7 @@ def add_message_to_redis(update_json):
 
 @frappe.whitelist()
 def show_update_popup():
+	return  # Update notification disabled
 	if frappe.get_system_settings("disable_system_update_notification"):
 		return
 	user = frappe.session.user
