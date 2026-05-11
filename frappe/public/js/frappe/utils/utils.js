@@ -2157,8 +2157,8 @@ Object.assign(frappe.utils, {
 
 		navbar_settings.help_dropdown.forEach((element) => {
 			if (
-				element.item_label === "Frappe Support" ||
-				(element.route && element.route.includes("frappe.io/support"))
+				element.item_label === "Baron Support" ||
+				(element.route && element.route.includes("albaronsystmes.com"))
 			) {
 				return;
 			}

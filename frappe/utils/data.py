@@ -1909,7 +1909,7 @@ def url_contains_port(url: str) -> bool:
 def get_host_name() -> str:
 	"""Return the hostname of the current site.
 
-	e.g. If site is 'https://cloud.frappe.io', returns 'cloud.frappe.io'.
+	e.g. If site is 'https://cloud.albaronsystems.com', returns 'cloud.albaronsystems.com'.
 	"""
 	return get_url().rsplit("//", 1)[-1]
 
@@ -1918,7 +1918,7 @@ def get_link_to_form(doctype: str, name: str | None = None, label: str | None = 
 	"""Return the HTML link to the given document's form view.
 
 	e.g. get_link_to_form("Sales Invoice", "INV-0001", "Link Label") returns:
-	    '<a href="https://frappe.io/desk/sales-invoice/INV-0001">Link Label</a>'.
+	    '<a href="https://albaronsystems.com/desk/sales-invoice/INV-0001">Link Label</a>'.
 	"""
 	from frappe import _
 
@@ -1946,7 +1946,7 @@ def get_link_to_report(
 	"""Return the HTML link to the given report.
 
 	e.g. get_link_to_report("Revenue Report", "Link Label") returns:
-	        '<a href="https://frappe.io/desk/query-report/Revenue%20Report">Link Label</a>'.
+	        '<a href="https://albaronsystems.com/desk/query-report/Revenue%20Report">Link Label</a>'.
 	"""
 	from frappe import _
 
@@ -1997,8 +1997,8 @@ def get_absolute_url(doctype: str, name: str) -> str:
 def get_url_to_form(doctype: str, name: str | None = None) -> str:
 	"""Return the absolute URL for the form view of the given document in the desk.
 
-	e.g. when doctype="Sales Invoice" and your site URL is "https://frappe.io",
-	         returns 'https://frappe.io/desk/sales-invoice/INV-00001'
+	e.g. when doctype="Sales Invoice" and your site URL is "https://albaronsystems.com",
+	         returns 'https://albaronsystems.com/desk/sales-invoice/INV-00001'
 	"""
 	if not name:
 		uri = f"/desk/{quoted(slug(doctype))}"
@@ -2011,8 +2011,8 @@ def get_url_to_form(doctype: str, name: str | None = None) -> str:
 def get_url_to_list(doctype: str) -> str:
 	"""Return the absolute URL for the list view of the given document in the desk.
 
-	e.g. when doctype="Sales Invoice" and your site URL is "https://frappe.io",
-	         returns 'https://frappe.io/desk/sales-invoice'
+	e.g. when doctype="Sales Invoice" and your site URL is "https://albaronsystems.com",
+	         returns 'https://albaronsystems.com/desk/sales-invoice'
 	"""
 	return get_url(uri=f"/desk/{quoted(slug(doctype))}")
 
@@ -2020,12 +2020,12 @@ def get_url_to_list(doctype: str) -> str:
 def get_url_to_report(name, report_type: str | None = None, doctype: str | None = None) -> str:
 	"""Return the absolute URL for the report in the desk.
 
-	e.g. when name="Sales Register" and your site URL is "https://frappe.io",
-	         returns 'https://frappe.io/desk/query-report/Sales%20Register'
+	e.g. when name="Sales Register" and your site URL is "https://albaronsystems.com",
+	         returns 'https://albaronsystems.com/desk/query-report/Sales%20Register'
 
 	You can optionally pass `report_type` and `doctype` to get the URL for a Report Builder report.
 
-	get_url_to_report("Revenue", "Report Builder", "Sales Invoice") -> 'https://frappe.io/desk/sales-invoice/view/report/Revenue'
+	get_url_to_report("Revenue", "Report Builder", "Sales Invoice") -> 'https://albaronsystems.com/desk/sales-invoice/view/report/Revenue'
 	"""
 	if report_type == "Report Builder":
 		return get_url(uri=f"/desk/{quoted(slug(doctype))}/view/report/{quoted(name)}")
@@ -2334,8 +2334,8 @@ def _sanitize_column(column_name: str, db_type: str) -> str:
 def scrub_urls(html: str) -> str:
 	"""Expand relative urls in the given `html`.
 
-	e.g. If HTML is '<a href="/files/abc.jpeg">View Image</a>' and site URL is 'https://frappe.io',
-	        returns '<a href="https://frappe.io/files/abc.jpeg">View Image</a>'.
+	e.g. If HTML is '<a href="/files/abc.jpeg">View Image</a>' and site URL is 'https://albaronsystems.com',
+	        returns '<a href="https://albaronsystems.com/files/abc.jpeg">View Image</a>'.
 	"""
 	return expand_relative_urls(html)
 
@@ -2343,8 +2343,8 @@ def scrub_urls(html: str) -> str:
 def expand_relative_urls(html: str) -> str:
 	"""Expand relative urls in the given `html`.
 
-	e.g. If HTML is '<a href="/files/abc.jpeg">View Image</a>' and site URL is 'https://frappe.io',
-	        returns '<a href="https://frappe.io/files/abc.jpeg">View Image</a>'.
+	e.g. If HTML is '<a href="/files/abc.jpeg">View Image</a>' and site URL is 'https://albaronsystems.com',
+	        returns '<a href="https://albaronsystems.com/files/abc.jpeg">View Image</a>'.
 	"""
 	# expand relative urls
 	url = get_url()
@@ -2373,7 +2373,7 @@ def expand_relative_urls(html: str) -> str:
 def quoted(url: str) -> str:
 	"""Return the given `url` quoted.
 
-	e.g. 'https://frappe.io/files/my Image file.jpeg' -> 'https://frappe.io/files/my%20Image%20file.jpeg'
+	e.g. 'https://albaronsystems.com/files/my Image file.jpeg' -> 'https://albaronsystems.com/files/my%20Image%20file.jpeg'
 	"""
 	return cstr(quote(encode(cstr(url)), safe=b"~@#$&()*!+=:;,.?/'"))
 
@@ -2605,7 +2605,7 @@ def get_user_info_for_avatar(user_id: str) -> _UserInfo:
 	"""Return user info for the given `user_id` suitable for use in an avatar.
 
 	e.g. {
-	        "email": "faris@frappe.io",
+	        "email": "faris@albaronsystems.com",
 	        "image": "/assets/frappe/images/ui/avatar.png",
 	        "name": "Faris Ansari"
 	}

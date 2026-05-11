@@ -797,7 +797,7 @@ msgstr "تصاعدي"
 #. Type: Action
 #: frappe/hooks.py
 msgid "About"
-msgstr ""
+msgstr "حولنا"
 
 #: frappe/www/about.html:11 frappe/www/about.html:18
 msgid "About Us"
@@ -1146,8 +1146,8 @@ msgid "Add Indexes"
 msgstr ""
 
 #: frappe/public/js/frappe/form/grid.js:66
-msgid "Add Multiple"
-msgstr ""
+msgid "Add multiple"
+msgstr "اضافة متعددة"
 
 #: frappe/core/page/permission_manager/permission_manager.js:495
 msgid "Add New Permission Rule"
@@ -6279,7 +6279,7 @@ msgstr "خطر"
 #. Option for the 'Desk Theme' (Select) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Dark"
-msgstr ""
+msgstr "داكن"
 
 #. Label of the dark_color (Link) field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
@@ -6288,7 +6288,7 @@ msgstr "لون غامق"
 
 #: frappe/public/js/frappe/ui/theme_switcher.js:65
 msgid "Dark Theme"
-msgstr ""
+msgstr "ثيم داكن"
 
 #. Label of the dashboard (Check) field in DocType 'User'
 #. Label of a Link in the Build Workspace
@@ -6308,7 +6308,7 @@ msgstr ""
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:606
 #: frappe/public/js/frappe/utils/utils.js:976
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة القيادة"
 
 #. Label of a Link in the Build Workspace
 #. Name of a DocType
@@ -6717,7 +6717,7 @@ msgstr ""
 
 #: frappe/website/doctype/website_theme/website_theme.js:28
 msgid "Default Theme"
-msgstr "الموضوع الافتراضي"
+msgstr "الثيم الافتراضي"
 
 #. Label of the default_role (Link) field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
@@ -7147,7 +7147,7 @@ msgstr ""
 #: frappe/public/js/frappe/ui/sidebar/sidebar_header.js:21
 #: frappe/www/me.html:86
 msgid "Desktop"
-msgstr ""
+msgstr "سطح المكتب"
 
 #. Name of a DocType
 #: frappe/desk/doctype/desktop_icon/desktop_icon.json
@@ -8079,7 +8079,7 @@ msgstr ""
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:8
 #: frappe/public/js/frappe/form/grid.js:66
 msgid "Download"
-msgstr ""
+msgstr "تنزيل"
 
 #: frappe/public/js/frappe/views/reports/report_utils.js:247
 msgctxt "Export report"
@@ -8386,7 +8386,7 @@ msgstr "تحرير تنسيق"
 
 #: frappe/public/js/frappe/form/quick_entry.js:326
 msgid "Edit Full Form"
-msgstr ""
+msgstr "ملئ النموذج بالكامل"
 
 #: frappe/printing/page/print_format_builder/print_format_builder_field.html:27
 #: frappe/public/js/print_format_builder/Field.vue:83
@@ -12063,7 +12063,7 @@ msgstr "تلميح: تضمين الرموز والأرقام والأحرف ال
 #: frappe/www/contact.py:25 frappe/www/login.html:170 frappe/www/me.html:76
 #: frappe/www/message.html:29
 msgid "Home"
-msgstr ""
+msgstr "الرئيسية"
 
 #. Label of the home_page (Data) field in DocType 'Role'
 #. Label of the home_page (Data) field in DocType 'Website Settings'
@@ -14729,7 +14729,7 @@ msgstr ""
 #. Option for the 'Desk Theme' (Select) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Light"
-msgstr ""
+msgstr "فاتح"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -14745,7 +14745,7 @@ msgstr "لون فاتح"
 
 #: frappe/public/js/frappe/ui/theme_switcher.js:60
 msgid "Light Theme"
-msgstr ""
+msgstr "ثيم فاتح"
 
 #. Option for the 'Comment Type' (Select) field in DocType 'Comment'
 #: frappe/core/doctype/comment/comment.json
@@ -16451,7 +16451,7 @@ msgstr ""
 #: frappe/public/js/frappe/views/file/file_view.js:97
 #: frappe/website/doctype/website_slideshow/website_slideshow.js:25
 msgid "Name"
-msgstr ""
+msgstr "الاسم"
 
 #: frappe/integrations/doctype/webhook/webhook.js:29
 msgid "Name (Doc Name)"
@@ -17618,7 +17618,7 @@ msgstr "لا شيء للتحديث"
 #: frappe/email/doctype/notification/notification.json
 #: frappe/public/js/frappe/ui/sidebar/sidebar.js:258
 msgid "Notification"
-msgstr ""
+msgstr "الإشعارات"
 
 #. Name of a DocType
 #: frappe/desk/doctype/notification_log/notification_log.json
@@ -17667,7 +17667,7 @@ msgstr ""
 #: frappe/public/js/frappe/ui/notifications/notifications.js:61
 #: frappe/public/js/frappe/ui/notifications/notifications.js:218
 msgid "Notifications"
-msgstr "إخطارات"
+msgstr "الإشعارات"
 
 #: frappe/public/js/frappe/ui/notifications/notifications.js:330
 msgid "Notifications Disabled"
@@ -21774,7 +21774,7 @@ msgstr "أبلغ عن:"
 #: frappe/core/doctype/system_settings/system_settings.json
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:591
 msgid "Reports"
-msgstr ""
+msgstr "التقارير"
 
 #: frappe/patches/v14_0/update_workspace2.py:50
 msgid "Reports & Masters"
@@ -21891,7 +21891,7 @@ msgstr "الدقة: {0}"
 #: frappe/desk/doctype/module_onboarding/module_onboarding.js:17
 #: frappe/website/doctype/portal_settings/portal_settings.js:19
 msgid "Reset"
-msgstr ""
+msgstr "اعادة تعين"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:136
 msgid "Reset All Customizations"
@@ -22941,7 +22941,7 @@ msgstr ""
 #: frappe/templates/discussions/search.html:2
 #: frappe/templates/includes/search_template.html:26
 msgid "Search"
-msgstr ""
+msgstr "بحث"
 
 #. Label of the search_bar (Check) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -23912,7 +23912,7 @@ msgstr "تعيين كافتراضي"
 
 #: frappe/website/doctype/website_theme/website_theme.js:33
 msgid "Set as Default Theme"
-msgstr "تعيين كالموضوع الافتراضي"
+msgstr "تعيين كثيم الافتراضي"
 
 #. Option for the 'Naming Rule' (Select) field in DocType 'DocType'
 #. Option for the 'Naming Rule' (Select) field in DocType 'Customize Form'
@@ -24011,7 +24011,7 @@ msgstr "إعداد النظام الخاص بك"
 #: frappe/website/doctype/web_form/web_form.json
 #: frappe/website/doctype/web_page/web_page.json frappe/www/me.html:20
 msgid "Settings"
-msgstr ""
+msgstr "الإعدادات"
 
 #. Label of the settings_dropdown (Table) field in DocType 'Navbar Settings'
 #: frappe/core/doctype/navbar_settings/navbar_settings.json
@@ -25655,7 +25655,7 @@ msgstr ""
 #: frappe/public/js/frappe/desk.js:96
 #: frappe/public/js/frappe/ui/theme_switcher.js:11
 msgid "Switch Theme"
-msgstr ""
+msgstr "تبديل الثيم"
 
 #: frappe/templates/includes/navbar/navbar_login.html:17
 msgid "Switch To Desk"
@@ -26491,7 +26491,7 @@ msgstr "{0} قيد التكرار التلقائي {1}"
 #: frappe/website/doctype/website_settings/website_settings.json
 #: frappe/website/doctype/website_theme/website_theme.json
 msgid "Theme"
-msgstr "موضوع"
+msgstr "ثيم"
 
 #: frappe/public/js/frappe/ui/theme_switcher.js:130
 msgid "Theme Changed"
@@ -27305,7 +27305,7 @@ msgstr "تبديل الشريط الجانبي"
 #. Type: Action
 #: frappe/hooks.py
 msgid "Toggle Theme"
-msgstr ""
+msgstr "تبديل الثيم"
 
 #. Option for the 'Response Type' (Select) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
@@ -27419,7 +27419,7 @@ msgstr "موضوع"
 #: frappe/public/js/frappe/views/reports/query_report.js:1354
 #: frappe/public/js/frappe/views/reports/report_view.js:1547
 msgid "Total"
-msgstr ""
+msgstr "الاجمالي"
 
 #. Label of the total_background_workers (Int) field in DocType 'System Health
 #. Report'
@@ -28106,7 +28106,7 @@ msgstr "الأحداث القادمة لهذا اليوم"
 #: frappe/printing/page/print_format_builder/print_format_builder.js:765
 #: frappe/public/js/frappe/form/grid_row.js:427
 msgid "Update"
-msgstr ""
+msgstr "تحديث"
 
 #. Label of the update_amendment_naming (Button) field in DocType 'Document
 #. Naming Settings'
@@ -28246,7 +28246,7 @@ msgstr ""
 #: frappe/public/js/frappe/form/grid.js:66
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:13
 msgid "Upload"
-msgstr "تحميل"
+msgstr "رفع"
 
 #: frappe/public/js/print_format_builder/LetterHeadEditor.vue:93
 msgid "Upload Image"
@@ -31474,7 +31474,7 @@ msgstr "{0} تقرير"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:967
 msgid "{0} Reports"
-msgstr ""
+msgstr "تقارير {0}"
 
 #: frappe/public/js/frappe/views/kanban/kanban_settings.js:26
 msgid "{0} Settings"
@@ -31495,11 +31495,11 @@ msgstr "{0} أضيف"
 
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:273
 msgid "{0} added 1 row to {1}"
-msgstr ""
+msgstr "أضاف {0} صفًا واحدًا إلى {1}"
 
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:251
 msgid "{0} added {1} rows to {2}"
-msgstr ""
+msgstr "أضاف {0} {1} صفوف إلى {2}"
 
 #: frappe/public/js/frappe/form/controls/data.js:215
 msgid "{0} already exists. Select another name"

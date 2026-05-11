@@ -123,7 +123,7 @@ frappe.ui.Sidebar = class Sidebar {
 			"Sales without complexity, lock-in and per-user costs. Try it for free!"
 		);
 		const link =
-			"https://frappe.io/crm?utm_source=crm-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
+			/*"https://frappe.io/crm?utm_source=crm-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";*/
 
 		this.promotional_banners.push({ title, message, link, icon });
 	}
@@ -143,7 +143,7 @@ frappe.ui.Sidebar = class Sidebar {
 			"Support without complexity, lock-in and per-user costs. Try it for free!"
 		);
 		const link =
-			"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
+			/*"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";*/
 
 		this.promotional_banners.push({ title, message, link, icon });
 	}

@@ -526,7 +526,7 @@ class TestValidationUtils(IntegrationTestCase):
 
 		# Valid URLs
 		self.assertTrue(validate_url("https://google.com"))
-		self.assertTrue(validate_url("http://frappe.io", throw=True))
+		self.assertTrue(validate_url("http://albaronsystems.com", throw=True))
 
 		# Invalid URLs without throw
 		self.assertFalse(validate_url("google.io"))
@@ -538,11 +538,11 @@ class TestValidationUtils(IntegrationTestCase):
 		# Scheme validation
 		self.assertFalse(validate_url("https://google.com", valid_schemes="http"))
 		self.assertTrue(validate_url("ftp://frappe.cloud", valid_schemes=["https", "ftp"]))
-		self.assertFalse(validate_url("bolo://frappe.io", valid_schemes=("http", "https", "ftp", "ftps")))
+		self.assertFalse(validate_url("bolo://albaronsystems.com", valid_schemes=("http", "https", "ftp", "ftps")))
 		self.assertRaises(
 			frappe.ValidationError,
 			validate_url,
-			"gopher://frappe.io",
+			"gopher://albaronsystems.com",
 			valid_schemes="https",
 			throw=True,
 		)
@@ -554,7 +554,7 @@ class TestValidationUtils(IntegrationTestCase):
 
 		# Valid addresses
 		self.assertTrue(validate_email_address("someone@frappe.com"))
-		self.assertTrue(validate_email_address("someone@frappe.com, anyone@frappe.io"))
+		self.assertTrue(validate_email_address("someone@frappe.com, anyone@albaronsystems.com"))
 		self.assertTrue(validate_email_address("test%201@frappe.com"))
 
 		# Invalid address
@@ -1183,15 +1183,15 @@ class TestLazyLoader(IntegrationTestCase):
 
 class TestIdenticon(IntegrationTestCase):
 	def test_get_gravatar(self):
-		# developers@frappe.io has a gravatar linked so str URL will be returned
+		# developers@albaronsystems.com has a gravatar linked so str URL will be returned
 		toggle_test_mode(False)
-		gravatar_url = get_gravatar("developers@frappe.io")
+		gravatar_url = get_gravatar("developers@albaronsystems.com")
 		toggle_test_mode(True)
 		self.assertIsInstance(gravatar_url, str)
 		self.assertTrue(gravatar_url.startswith("http"))
 
 		# random email will require Identicon to be generated, which will be a base64 string
-		gravatar_url = get_gravatar(f"developers{random_string(6)}@frappe.io")
+		gravatar_url = get_gravatar(f"developers{random_string(6)}@albaronsystems.com")
 		self.assertIsInstance(gravatar_url, str)
 		self.assertTrue(gravatar_url.startswith("data:image/png;base64,"))
 

@@ -695,9 +695,9 @@ class TestDB(IntegrationTestCase):
 			modify_query(query),
 		)
 
-		query = 'select locate(".io", "frappe.io"), locate("3", cast(3 as varchar)), locate("3", 3::varchar)'
+		query = 'select locate(".com", "albaronsystems.com"), locate("3", cast(3 as varchar)), locate("3", 3::varchar)'
 		self.assertEqual(
-			'select strpos( "frappe.io", ".io"), strpos( cast(3 as varchar), "3"), strpos( 3::varchar, "3")',
+			'select strpos( "albaronsystems.com", ".com"), strpos( cast(3 as varchar), "3"), strpos( 3::varchar, "3")',
 			modify_query(query),
 		)
 
