@@ -14,6 +14,16 @@
 					</span>
 				</button>
 				<div class="flex title-area ellipsis">
+					<button class="btn btn-default icon-btn history-nav-btn" type="button" onclick="window.history.back()" aria-label="{{ __("Back") }}">
+						<svg class="icon icon-sm">
+							<use href="#icon-right"></use>
+						</svg>
+					</button>
+					<button class="btn btn-default icon-btn history-nav-btn" type="button" onclick="window.history.forward()" aria-label="{{ __("Forward") }}">
+						<svg class="icon icon-sm">
+							<use href="#icon-left"></use>
+						</svg>
+					</button>
 					<ul class="nav d-sm-flex navbar-breadcrumbs ellipsis {{frappe.is_mobile() ? "mobile-no-divider" : ""}}  "></ul>
 					<button class="btn btn-default more-button hide">
 						<svg class="icon icon-sm">

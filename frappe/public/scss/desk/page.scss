@@ -36,6 +36,24 @@
 	.title-area {
 		display: inline-flex;
 		align-items: center;
+		.history-nav-btn {
+			background-color: var(--gray-200);
+			border: 1px solid var(--gray-500);
+			border-radius: var(--border-radius);
+			color: var(--gray-900);
+			height: 28px;
+			margin-right: 8px;
+			--icon-stroke: var(--gray-900);
+			width: 28px;
+		}
+		.history-nav-btn + .navbar-breadcrumbs {
+			margin-left: 4px;
+		}
+		.history-nav-btn:hover {
+			background-color: var(--gray-300);
+			color: var(--text-color);
+			--icon-stroke: var(--text-color);
+		}
 		.indicator-pill {
 			margin-left: var(--margin-sm);
 			.indicator-doc-html {
