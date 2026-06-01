@@ -5,9 +5,7 @@ export default class GridPagination {
 	}
 
 	setup_pagination() {
-		// CUSTOMIZATION: Default to 5 rows per page instead of 50
-		// This creates a scrollable view for better UX with large tables
-		this.page_length = this.grid.meta?.grid_page_length || 5;
+		this.page_length = this.grid.meta?.grid_page_length || 50;
 		this.page_index = 1;
 		this.total_pages = Math.ceil(this.grid.data.length / this.page_length);
 
@@ -121,18 +119,12 @@ export default class GridPagination {
 				<span class="total-page-number page-number"> ${__(this.total_pages)} </span>
 			</div>`;
 
-		// CUSTOMIZATION: Use appropriate icons for RTL/LTR
-		// In RTL mode, we use 'right' icon for prev (since prev is on the right visually)
-		const is_rtl = document.dir === 'rtl';
-		const prev_icon = is_rtl ? frappe.utils.icon("right", "xs") : frappe.utils.icon("left", "xs");
-		const next_icon = is_rtl ? frappe.utils.icon("left", "xs") : frappe.utils.icon("right", "xs");
-
-		return $(`<button class="btn btn-secondary btn-xs first-page">
+		return $(`<button class="btn btn-secondary btn-xs first-page"">
 				<span>${__("First")}</span>
 			</button>
-			<button class="btn btn-secondary btn-xs prev-page">${prev_icon}</button>
+			<button class="btn btn-secondary btn-xs prev-page">${frappe.utils.icon("left", "xs")}</button>
 			${page_text_html}
-			<button class="btn btn-secondary btn-xs next-page">${next_icon}</button>
+			<button class="btn btn-secondary btn-xs next-page">${frappe.utils.icon("right", "xs")}</button>
 			<button class="btn btn-secondary btn-xs last-page">
 				<span>${__("Last")}</span>
 			</button>`);

@@ -619,10 +619,11 @@
 .grid-custom-buttons:empty {
 	padding: 0;
 }
-.grid-footer {
-	margin-top: var(--margin-sm);
+
+.grid-toolbar {
+	margin-bottom: var(--margin-sm);
 }
-.grid-footer,
+.grid-toolbar,
 .grid-custom-buttons {
 	padding: var(--padding-sm) 0px;
 	background-color: var(--fg-color);

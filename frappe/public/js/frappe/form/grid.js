@@ -69,38 +69,26 @@ export default class Grid {
 				<span class="help"></span>
 				<p class="text-muted small grid-description"></p>
 				<div class="grid-custom-buttons"></div>
-				<div class="form-grid-container">
-					<div class="form-grid">
-						<div class="grid-heading-row"></div>
-						<div class="grid-body">
-							<div class="rows"></div>
-							<div class="grid-empty text-center text-extra-muted">
-								${__("No rows")}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="small form-clickable-section grid-footer">
+				<div class="small form-clickable-section grid-toolbar">
 					<div class="flex justify-between">
 						<div class="grid-buttons">
+							<button type="button" class="btn btn-xs btn-secondary grid-add-row">
+								${__("Add row")}
+							</button>
+							<button type="button" class="grid-add-multiple-rows btn btn-xs btn-secondary hidden">
+								${__("Add multiple")}
+							</button>
 							<button type="button" class="btn btn-xs btn-danger grid-remove-rows hidden"
 								data-action="delete_rows">
 								${__("Delete")}
 							</button>
 							<button type="button" class="btn btn-xs btn-danger grid-remove-all-rows hidden"
 							data-action="delete_all_rows">
-							${__("Delete all")}
+								${__("Delete all")}
 							</button>
 							<button type="button" class="btn btn-xs btn-secondary grid-duplicate-rows hidden"
 								data-action="duplicate_rows">
 								${__("Duplicate rows")}
-							</button>
-							<!-- hack to allow firefox include this in tabs -->
-							<button type="button" class="btn btn-xs btn-secondary grid-add-row">
-								${__("Add row")}
-							</button>
-							<button type="button" class="grid-add-multiple-rows btn btn-xs btn-secondary hidden">
-								${__("Add multiple")}</a>
 							</button>
 						</div>
 						<div class="grid-pagination">
@@ -112,6 +100,17 @@ export default class Grid {
 							<button type="button" class="grid-upload btn btn-xs btn-secondary hidden">
 								${__("Upload")}
 							</button>
+						</div>
+					</div>
+				</div>
+				<div class="form-grid-container">
+					<div class="form-grid">
+						<div class="grid-heading-row"></div>
+						<div class="grid-body">
+							<div class="rows"></div>
+							<div class="grid-empty text-center text-extra-muted">
+								${__("No rows")}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -642,7 +641,7 @@ export default class Grid {
 	setup_toolbar() {
 		const is_editable = this.is_editable();
 		if (is_editable) {
-			this.wrapper.find(".grid-footer").removeClass("hidden");
+			this.wrapper.find(".grid-toolbar").removeClass("hidden");
 
 			const num_selected_rows = this.get_selected_children().length;
 			// show, hide buttons to add rows
@@ -667,7 +666,7 @@ export default class Grid {
 			this.grid_rows.length < this.grid_pagination.page_length &&
 			!this.df.allow_bulk_edit
 		) {
-			this.wrapper.find(".grid-footer").addClass("hidden");
+			this.wrapper.find(".grid-toolbar").addClass("hidden");
 		}
 
 		// don't be tempted to use the `.hidden` class here
@@ -942,10 +941,9 @@ export default class Grid {
 
 	setup_add_row() {
 		this.wrapper.find(".grid-add-row").click(() => {
-			// CUSTOMIZATION: Add row at top (index 1) instead of bottom
-			// This ensures new rows appear at the beginning of the table
-			this.add_new_row(1, null, true, null, false, true);
-			this.set_focus_on_row(0); // Focus on first row (newly added)
+			// Insert at top (idx=1) and go to first page, don't show form details
+			this.add_new_row(1, null, false, null, false, true);
+			this.set_focus_on_row(0);
 
 			return false;
 		});
@@ -954,13 +952,6 @@ export default class Grid {
 	add_new_row(idx, callback, show, copy_doc, go_to_last_page = false, go_to_first_page = false) {
 		let cannot_add_rows = this.cannot_add_rows || (this.df && this.df.cannot_add_rows);
 		if (this.is_editable() && !cannot_add_rows) {
-			// CUSTOMIZATION: Default to first position (idx=1) for new rows
-			// This ensures new rows are added at the top by default
-			if (!idx && idx !== 0) {
-				idx = 1;
-				go_to_first_page = true;
-			}
-			
 			if (go_to_last_page) {
 				this.grid_pagination.go_to_last_page_to_add_row();
 			} else if (go_to_first_page) {
@@ -968,23 +959,32 @@ export default class Grid {
 			}
 
 			if (this.frm) {
+				// Add at end to get highest idx, then move to top
 				var d = frappe.model.add_child(
 					this.frm.doc,
 					this.df.options,
-					this.df.fieldname,
-					idx
+					this.df.fieldname
 				);
 				if (copy_doc) {
 					d = this.duplicate_row(d, copy_doc);
 				}
 				d.__unedited = true;
-				
-				// CUSTOMIZATION: Renumber all rows after adding at top
-				// This ensures idx values are sequential from 1 to N
-				this.renumber_rows();
-				
+				// Move the new row to the beginning of the array (top of grid)
+				let child_table = this.frm.doc[this.df.fieldname];
+				let new_row_data = child_table.pop(); // Remove from end
+				child_table.unshift(new_row_data); // Add to beginning
+				// Renumber: new row at top gets highest idx, others keep their relative order
+				child_table.forEach((row, index) => {
+					row.idx = child_table.length - index;
+				});
 				this.frm.script_manager.trigger(this.df.fieldname + "_add", d.doctype, d.name);
 				this.refresh();
+				// Update row index display only (lightweight) for better performance
+				this.grid_rows.forEach(row => {
+					if (row && row.doc && row.doc.name !== d.name && row.set_row_index) {
+						row.set_row_index();
+					}
+				});
 			} else {
 				if (!this.df.data) {
 					this.df.data = this.get_data() || [];
@@ -994,23 +994,35 @@ export default class Grid {
 					return acc;
 				}, {});
 
-				const row_idx = this.df.data.length + 1;
-				this.df.data.push({ idx: row_idx, __islocal: true, ...defaults });
+				let row_idx;
+				if (idx === 1) {
+					// Insert at beginning (top), give it the highest idx
+					row_idx = this.df.data.length + 1;
+					const new_row = { idx: row_idx, __islocal: true, ...defaults };
+					this.df.data.unshift(new_row);
+					// Renumber in reverse: top row gets highest number, bottom gets 1
+					this.df.data.forEach((row, index) => {
+						row.idx = this.df.data.length - index;
+					});
+				} else {
+					// Add at end with next idx
+					row_idx = this.df.data.length + 1;
+					const new_row = { idx: row_idx, __islocal: true, ...defaults };
+					this.df.data.push(new_row);
+				}
+
 				this.df.on_add_row && this.df.on_add_row(row_idx);
 				this.refresh();
+				// Update row index display only (lightweight) for better performance
+				this.grid_rows.forEach(row => {
+					if (row && row.set_row_index) {
+						row.set_row_index();
+					}
+				});
 			}
 
 			if (show) {
-				// CUSTOMIZATION: For rows added at top (idx=1), show the first row
-				if (idx === 1) {
-					if (!this.allow_on_grid_editing()) {
-						// open first row (newly added at top)
-						this.wrapper
-							.find(".grid-row:first")
-							.data("grid_row")
-							.toggle_view(true, callback);
-					}
-				} else if (idx) {
+				if (idx) {
 					// always open inserted rows
 					this.wrapper
 						.find("[data-idx='" + idx + "']")
@@ -1018,9 +1030,9 @@ export default class Grid {
 						.toggle_view(true, callback);
 				} else {
 					if (!this.allow_on_grid_editing()) {
-						// open last row only if on-grid-editing is disabled
+						// open first row (newest at top) only if on-grid-editing is disabled
 						this.wrapper
-							.find(".grid-row:last")
+							.find(".grid-row:first")
 							.data("grid_row")
 							.toggle_view(true, callback);
 					}
@@ -1032,13 +1044,14 @@ export default class Grid {
 	}
 
 	renumber_based_on_dom() {
-		// renumber based on dom
+		// renumber based on dom with reverse numbering: top row gets highest number
 		let $rows = $(this.parent).find(".rows");
+		let total_rows = $rows.find(".grid-row").length;
 
 		$rows.find(".grid-row").each((i, item) => {
 			let $item = $(item);
-			let index =
-				(this.grid_pagination.page_index - 1) * this.grid_pagination.page_length + i;
+			// With reverse numbering: first row (i=0) gets highest idx
+			let index = total_rows - i - 1;
 			let d = this.grid_rows_by_docname[$item.attr("data-name")].doc;
 			d.idx = index + 1;
 			$item.attr("data-idx", d.idx);
@@ -1046,15 +1059,6 @@ export default class Grid {
 			if (this.frm) this.frm.doc[this.df.fieldname][index] = d;
 			this.data[index] = d;
 			this.grid_rows[index] = this.grid_rows_by_docname[d.name];
-		});
-	}
-
-	// CUSTOMIZATION: Helper method to renumber rows after inserting at top
-	renumber_rows() {
-		if (!this.frm) return;
-		const child_docs = this.frm.doc[this.df.fieldname] || [];
-		child_docs.forEach((d, i) => {
-			d.idx = i + 1;
 		});
 	}
 
@@ -1081,20 +1085,16 @@ export default class Grid {
 	}
 
 	set_focus_on_row(idx) {
-		// CUSTOMIZATION: Default to first row (index 0) instead of last row
-		// This ensures focus goes to the newly added row at the top
 		if (!idx && idx !== 0) {
-			idx = 0;
+			idx = this.grid_rows.length - 1;
 		}
 
 		setTimeout(() => {
-			if (this.grid_rows[idx]) {
-				this.grid_rows[idx].toggle_editable_row(true);
-				this.grid_rows[idx].row
-					.find('input[type="Text"],textarea,select')
-					.filter(":visible:first")
-					.focus();
-			}
+			this.grid_rows[idx].toggle_editable_row(true);
+			this.grid_rows[idx].row
+				.find('input[type="Text"],textarea,select')
+				.filter(":visible:first")
+				.focus();
 		}, 100);
 	}
 
@@ -1247,7 +1247,8 @@ export default class Grid {
 				target: this,
 				txt: "",
 			});
-			this.grid_pagination.go_to_last_page_to_add_row();
+			// Go to first page since new rows are added at top
+			this.grid_pagination.go_to_page(1);
 			return false;
 		});
 		this.multiple_set = true;

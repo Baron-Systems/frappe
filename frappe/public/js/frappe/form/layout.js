@@ -667,8 +667,8 @@ frappe.ui.form.Layout = class Layout {
 				if (field.df.fieldtype === "Table") {
 					// open table grid
 					if (!(field.grid.grid_rows && field.grid.grid_rows.length)) {
-						// empty grid, add a new row
-						field.grid.add_new_row();
+						// empty grid, add a new row at top
+						field.grid.add_new_row(1, null, false);
 					}
 					// show grid row (if exists)
 					field.grid.grid_rows[0].show_form();

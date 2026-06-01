@@ -195,6 +195,7 @@
    "options": "\n2\n3\n4\n5\n6\n7\n8\n9"
   },
   {
+   "default": "2",
    "description": "If not set, the currency precision will depend on number format",
    "fieldname": "currency_precision",
    "fieldtype": "Select",
@@ -256,7 +257,7 @@
    "label": "Allow only one session per user"
   },
   {
-   "default": "0",
+   "default": "1",
    "description": "User can login using Email id or Mobile number",
    "fieldname": "allow_login_using_mobile_number",
    "fieldtype": "Check",
@@ -436,7 +437,7 @@
    "label": "Logout All Sessions on Password Reset"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_onboarding",
    "fieldtype": "Check",
    "label": "Enable Onboarding"
@@ -477,7 +478,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "disable_system_update_notification",
    "fieldtype": "Check",
    "label": "Disable System Update Notification"
@@ -792,7 +793,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "description": "Adds a clear (\u00d7) button to Link fields, allowing users to quickly remove the selected value.",
    "fieldname": "allow_clearing_link_fields",
    "fieldtype": "Check",
@@ -802,7 +803,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-04-14 16:26:19.634212",
+ "modified": "2026-06-01 23:25:12.994821",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
