@@ -942,8 +942,10 @@ export default class Grid {
 
 	setup_add_row() {
 		this.wrapper.find(".grid-add-row").click(() => {
-			this.add_new_row(null, null, true, null, true);
-			this.set_focus_on_row();
+			// CUSTOMIZATION: Add row at top (index 1) instead of bottom
+			// This ensures new rows appear at the beginning of the table
+			this.add_new_row(1, null, true, null, false, true);
+			this.set_focus_on_row(0); // Focus on first row (newly added)
 
 			return false;
 		});
@@ -952,6 +954,13 @@ export default class Grid {
 	add_new_row(idx, callback, show, copy_doc, go_to_last_page = false, go_to_first_page = false) {
 		let cannot_add_rows = this.cannot_add_rows || (this.df && this.df.cannot_add_rows);
 		if (this.is_editable() && !cannot_add_rows) {
+			// CUSTOMIZATION: Default to first position (idx=1) for new rows
+			// This ensures new rows are added at the top by default
+			if (!idx && idx !== 0) {
+				idx = 1;
+				go_to_first_page = true;
+			}
+			
 			if (go_to_last_page) {
 				this.grid_pagination.go_to_last_page_to_add_row();
 			} else if (go_to_first_page) {
@@ -969,6 +978,11 @@ export default class Grid {
 					d = this.duplicate_row(d, copy_doc);
 				}
 				d.__unedited = true;
+				
+				// CUSTOMIZATION: Renumber all rows after adding at top
+				// This ensures idx values are sequential from 1 to N
+				this.renumber_rows();
+				
 				this.frm.script_manager.trigger(this.df.fieldname + "_add", d.doctype, d.name);
 				this.refresh();
 			} else {
@@ -987,7 +1001,16 @@ export default class Grid {
 			}
 
 			if (show) {
-				if (idx) {
+				// CUSTOMIZATION: For rows added at top (idx=1), show the first row
+				if (idx === 1) {
+					if (!this.allow_on_grid_editing()) {
+						// open first row (newly added at top)
+						this.wrapper
+							.find(".grid-row:first")
+							.data("grid_row")
+							.toggle_view(true, callback);
+					}
+				} else if (idx) {
 					// always open inserted rows
 					this.wrapper
 						.find("[data-idx='" + idx + "']")
@@ -1026,6 +1049,15 @@ export default class Grid {
 		});
 	}
 
+	// CUSTOMIZATION: Helper method to renumber rows after inserting at top
+	renumber_rows() {
+		if (!this.frm) return;
+		const child_docs = this.frm.doc[this.df.fieldname] || [];
+		child_docs.forEach((d, i) => {
+			d.idx = i + 1;
+		});
+	}
+
 	duplicate_row(d, copy_doc) {
 		$.each(copy_doc, function (key, value) {
 			if (
@@ -1049,16 +1081,20 @@ export default class Grid {
 	}
 
 	set_focus_on_row(idx) {
+		// CUSTOMIZATION: Default to first row (index 0) instead of last row
+		// This ensures focus goes to the newly added row at the top
 		if (!idx && idx !== 0) {
-			idx = this.grid_rows.length - 1;
+			idx = 0;
 		}
 
 		setTimeout(() => {
-			this.grid_rows[idx].toggle_editable_row(true);
-			this.grid_rows[idx].row
-				.find('input[type="Text"],textarea,select')
-				.filter(":visible:first")
-				.focus();
+			if (this.grid_rows[idx]) {
+				this.grid_rows[idx].toggle_editable_row(true);
+				this.grid_rows[idx].row
+					.find('input[type="Text"],textarea,select')
+					.filter(":visible:first")
+					.focus();
+			}
 		}, 100);
 	}
 

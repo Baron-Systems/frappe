@@ -31049,7 +31049,7 @@ msgstr "الآن"
 
 #: frappe/public/js/frappe/form/grid_pagination.js:116
 msgid "of"
-msgstr ""
+msgstr "من"
 
 #. Label of the old_parent (Data) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
