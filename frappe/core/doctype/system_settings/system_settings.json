@@ -437,7 +437,7 @@
    "label": "Logout All Sessions on Password Reset"
   },
   {
-   "default": "1",
+   "default": "0",
    "fieldname": "enable_onboarding",
    "fieldtype": "Check",
    "label": "Enable Onboarding"
@@ -803,7 +803,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-06-01 23:25:12.994821",
+ "modified": "2026-06-02 11:25:55.973035",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
