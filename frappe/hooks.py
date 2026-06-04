@@ -260,7 +260,9 @@ scheduler_events = {
 		"frappe.email.doctype.notification.notification.trigger_daily_alerts",
 		"frappe.desk.form.document_follow.send_daily_updates",
 	],
-	"daily_long": [],
+	"daily_long": [
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_daily",
+	],
 	"daily_maintenance": [
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_daily",
 		"frappe.desk.notifications.clear_notifications",
@@ -274,9 +276,11 @@ scheduler_events = {
 		"frappe.desk.form.document_follow.send_weekly_updates",
 		"frappe.utils.change_log.check_for_update",
 		"frappe.desk.doctype.changelog_feed.changelog_feed.fetch_changelog_feed",
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_weekly",
 	],
-	"monthly": [
+	"monthly_long": [
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_monthly",
 	],
 }
 
