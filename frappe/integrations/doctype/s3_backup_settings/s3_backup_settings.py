@@ -172,21 +172,24 @@ def backup_to_s3():
 	folder = path + os.path.basename(db_filename)[:15] + "/"
 	# for adding datetime to folder name
 
-	upload_file_to_s3(db_filename, folder, conn, bucket)
-	upload_file_to_s3(site_config, folder, conn, bucket)
+	try:
+		upload_file_to_s3(db_filename, folder, conn, bucket)
+		upload_file_to_s3(site_config, folder, conn, bucket)
 
-	if backup_files:
-		if private_files:
-			upload_file_to_s3(private_files, folder, conn, bucket)
+		if backup_files:
+			if private_files:
+				upload_file_to_s3(private_files, folder, conn, bucket)
 
-		if files_filename:
-			upload_file_to_s3(files_filename, folder, conn, bucket)
+			if files_filename:
+				upload_file_to_s3(files_filename, folder, conn, bucket)
 
-	# Delete old backups after uploading new one
-	delete_old_backups(conn, bucket, path)
+		# Only delete old backups if upload was successful
+		delete_old_backups(conn, bucket, path)
+		delete_old_local_backups()
 
-	# Delete old local backups too
-	delete_old_local_backups()
+	except Exception as e:
+		frappe.log_error(f"S3 Backup Upload Failed: {e}")
+		raise
 
 
 def upload_file_to_s3(filename, folder, conn, bucket):
@@ -201,14 +204,21 @@ def delete_old_backups(conn, bucket, backup_path):
 
 	backup_limit = cint(frappe.db.get_single_value("System Settings", "backup_limit") or 3)
 
+	# Safety check - don't delete if limit is unreasonably low
+	if backup_limit < 1:
+		print(f"Backup limit ({backup_limit}) is too low, skipping cleanup")
+		return
+
 	# List all backup folders in S3
 	prefix = backup_path if backup_path else ""
 	try:
 		response = conn.list_objects_v2(Bucket=bucket, Prefix=prefix, Delimiter="/")
 		if "CommonPrefixes" not in response:
+			print("No backup folders found in S3")
 			return
 
 		backup_folders = [p["Prefix"] for p in response["CommonPrefixes"]]
+		print(f"Found {len(backup_folders)} backup folders in S3: {backup_folders}")
 
 		# Sort folders by name (datetime format makes them sort chronologically)
 		backup_folders.sort(reverse=True)
@@ -216,9 +226,12 @@ def delete_old_backups(conn, bucket, backup_path):
 		# Delete old backups beyond the limit
 		if len(backup_folders) > backup_limit:
 			folders_to_delete = backup_folders[backup_limit:]
+			print(f"Backup limit is {backup_limit}, deleting {len(folders_to_delete)} old folder(s): {folders_to_delete}")
 			for folder in folders_to_delete:
 				print(f"Deleting old backup folder: {folder}")
 				delete_s3_folder(conn, bucket, folder)
+		else:
+			print(f"Found {len(backup_folders)} folder(s), limit is {backup_limit}, no deletion needed")
 
 	except ClientError as e:
 		frappe.log_error(f"S3 Backup Cleanup Error: {e}")
