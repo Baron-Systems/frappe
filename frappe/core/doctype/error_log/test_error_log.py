@@ -52,11 +52,11 @@ _THROW_EXC = """
 
 TEST_EXCEPTIONS = (
 	(
-		"erpabs (app)",
+		"erpnext (app)",
 		_RAW_EXC,
 	),
 	(
-		"erpabs (app)",
+		"erpnext (app)",
 		_THROW_EXC,
 	),
 )

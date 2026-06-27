@@ -55,7 +55,7 @@ from .utils.jinja import (
 	render_template,
 )
 
-__version__ = "16.19.0"
+__version__ = "16.23.0"
 __title__ = "Frappe Framework"
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -196,7 +196,8 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 	local.new_doc_templates = {}
 
 	local.request_cache = defaultdict(dict)
-	local.jenv = None
+	local.jenv_restricted = None
+	local.jenv_unrestricted = None
 	local.jloader = None
 	local.cache = {}
 	local.form_dict = _dict()
@@ -371,7 +372,8 @@ def set_user(username: str):
 	local.session.sid = username
 	local.cache = {}
 	local.form_dict = _dict()
-	local.jenv = None
+	local.jenv_restricted = None
+	local.jenv_unrestricted = None
 	local.session.data = _dict()
 	local.role_permissions = {}
 	local.new_doc_templates = {}

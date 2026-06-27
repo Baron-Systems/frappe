@@ -263,6 +263,7 @@ scheduler_events = {
 	"daily_long": [
 		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_daily",
 	],
+	"daily_long": [],
 	"daily_maintenance": [
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_daily",
 		"frappe.desk.notifications.clear_notifications",
@@ -281,6 +282,9 @@ scheduler_events = {
 	"monthly_long": [
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
 		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_monthly",
+	],
+	"monthly": [
+		"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
 	],
 }
 
@@ -542,5 +546,6 @@ add_to_apps_screen = [
 		"logo": app_logo_url,
 		"title": app_title,
 		"route": app_home,
+		"has_permission": "frappe.permissions.check_app_permission",
 	}
 ]

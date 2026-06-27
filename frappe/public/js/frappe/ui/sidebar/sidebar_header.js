@@ -76,18 +76,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					action: "frappe.ui.toolbar.clear_cache()",
 					is_standard: 1,
 					icon: "rotate-ccw",
+					shortcut: "Shift+Ctrl+R",
 				},
 				{
-					label: "Toggle Full Width",
-					action: "frappe.ui.toolbar.toggle_full_width()",
-					is_standard: 1,
-					icon: "maximize",
-				},
-				{
-					label: "Toggle Theme",
-					action: "new frappe.ui.ThemeSwitcher().show()",
-					is_standard: 1,
-					icon: is_dark ? "sun" : "moon",
+					name: "help",
+					label: "Help",
+					icon: "info",
+					items: this.get_help_siblings(),
 				},
 				{
 					is_divider: true,
@@ -213,16 +208,15 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		help_dropdown_items = custom_help_links.concat(help_dropdown_items);
 
 		navbar_settings.help_dropdown.forEach((element) => {
-			if (
-				element.item_label === "Baron Support" ||
-				(element.route && element.route.includes("albaronsystems.com"))
-			) {
-				return;
-			}
+			if (element.hidden) return;
+			if (element.condition && !frappe.utils.eval(element.condition)) return;
 			let dropdown_children = {
 				name: element.name,
 				label: element.item_label,
 			};
+			if (element.action?.includes("frappe.ui.toolbar.show_shortcuts")) {
+				dropdown_children.shortcut = "Shift+/";
+			}
 			if (element.item_type === "Route") {
 				dropdown_children.url = element.route;
 			}
@@ -244,6 +238,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				name: "toggle-theme",
 				label: __("Toggle Theme"),
 				icon: is_dark ? "sun" : "moon",
+				shortcut: "Shift+Ctrl+G",
 				onClick: function () {
 					new frappe.ui.ThemeSwitcher().show();
 				},
@@ -260,6 +255,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				name: "toggle-sidebar",
 				label: __("Toggle Sidebar"),
 				icon: "panel-right-open",
+				shortcut: "Ctrl+/",
 				onClick: function () {
 					sidebar.toggle_width();
 				},
@@ -367,6 +363,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					}
 				</div>
 				<span class="menu-item-title">${item.label}</span>
+				${
+					item.shortcut
+						? `<span class="menu-item-shortcut">${frappe.ui.keys.get_shortcut_label(
+								item.shortcut
+						  )}</span>`
+						: ""
+				}
 			</a>
 		</div>`).appendTo(this.dropdown_menu);
 	}

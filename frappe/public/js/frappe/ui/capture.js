@@ -1,5 +1,5 @@
 // frappe.ui.Capture
-
+// Author - Achilles Rasquinha <achilles@frappe.io>
 
 /**
  * @description Converts a canvas, image or a video to a data URL string.

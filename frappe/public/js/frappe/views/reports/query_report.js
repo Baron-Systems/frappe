@@ -417,12 +417,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			.then((doc) => {
 				this.report_doc = doc;
 			})
-			.then(() => frappe.model.with_doctype(this.report_doc?.ref_doctype))
-			.then(
-				() =>
-					this.report_doc.module &&
-					frappe.app.sidebar.show_sidebar_for_module(this.report_doc.module)
-			);
+			.then(() => frappe.model.with_doctype(this.report_doc?.ref_doctype));
 	}
 
 	get_report_settings() {
@@ -2005,33 +2000,36 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 												value: df.fieldname,
 											}));
 
-										d.set_df_property(
-											"field",
-											"options",
-											options.sort(function (a, b) {
-												if (a.label < b.label) {
-													return -1;
-												}
-												if (a.label > b.label) {
-													return 1;
-												}
-												return 0;
-											})
-										);
+										options = options.sort(function (a, b) {
+											if (a.label < b.label) {
+												return -1;
+											}
+											if (a.label > b.label) {
+												return 1;
+											}
+											return 0;
+										});
+
+										d.set_df_property("field", "options", options);
+										d.get_field("field")?.set_data(options);
+										d.set_value("field", "");
 									});
 								},
 							},
 							{
-								fieldtype: "Select",
+								fieldtype: "Autocomplete",
 								label: __("Field"),
 								fieldname: "field",
 								options: [],
 							},
 							{
-								fieldtype: "Select",
+								fieldtype: "Autocomplete",
 								label: __("Insert After"),
 								fieldname: "insert_after",
-								options: this.columns.map((df) => df.label),
+								options: this.columns.map((col) => ({
+									label: col.name || col.label,
+									value: col.fieldname,
+								})),
 							},
 						],
 						primary_action: (values) => {
@@ -2040,7 +2038,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 							Object.assign(values, { doctype, fieldname });
 							let df = frappe.meta.get_docfield(values.doctype, values.field);
 							const insert_after_index = this.columns.findIndex(
-								(column) => column.label === values.insert_after
+								(column) => column.fieldname === values.insert_after
 							);
 
 							custom_columns.push({

@@ -199,7 +199,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 						if (!updated) {
 							let d = null;
 							frappe.run_serially([
-								() => (d = this.target.add_new_row(1, null, false)),
+								() => (d = this.target.add_new_row()),
 								() => frappe.timeout(0.1),
 								() => {
 									let args = {};
@@ -216,7 +216,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 					__("Set Quantity")
 				);
 			} else if (this.dynamic_link_field) {
-				let d = this.target.add_new_row(1, null, false);
+				let d = this.target.add_new_row();
 				frappe.model.set_value(
 					d.doctype,
 					d.name,
@@ -228,7 +228,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 					resolve();
 				});
 			} else {
-				let d = this.target.add_new_row(1, null, false);
+				let d = this.target.add_new_row();
 				frappe.model.set_value(d.doctype, d.name, this.fieldname, value).then(() => {
 					frappe.show_alert(__("{0} added", [value]));
 					resolve();

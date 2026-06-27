@@ -5,7 +5,9 @@
 }
 .frappe-menu {
 	position: absolute;
-	width: var(--menu-width);
+	width: max-content;
+	min-width: var(--menu-width);
+	max-width: min(320px, calc(100vw - 16px));
 	padding: 6px;
 	border-radius: var(--border-radius-lg);
 	background: var(--surface-modal);
@@ -24,11 +26,12 @@
 		height: 28px;
 		padding: 6px 8px 6px 8px;
 		gap: 8px;
+		min-width: var(--menu-width);
 		text-decoration: none;
 		display: flex;
 		align-items: center;
 		gap: var(--margin-sm);
-		.menu-item-icon {
+		.frappe-menu-item-icon {
 			line-height: 0px;
 			.app-logo,
 			img {
@@ -44,11 +47,22 @@
 	.menu-item-title {
 		text-overflow: ellipsis;
 		text-wrap: nowrap;
+		white-space: nowrap;
 		overflow: hidden;
+		flex: 1;
+	}
+	.menu-item-shortcut {
+		margin-left: var(--margin-lg);
+		color: var(--ink-gray-4, #999999);
+		font-size: var(--text-sm);
+		font-weight: 420;
+		line-height: 1.15;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
 	}
 }
 
-.menu-item-icon {
+.frappe-menu-item-icon {
 	width: var(--menu-icon-size);
 	height: var(--menu-icon-size);
 	& .icon-container {

@@ -89,6 +89,7 @@
   "delete_background_exported_reports_after",
   "column_break_uqma",
   "allowed_file_extensions",
+  "allowed_doctypes_for_guest_uploads",
   "app_tab",
   "default_app",
   "updates_tab",
@@ -195,7 +196,6 @@
    "options": "\n2\n3\n4\n5\n6\n7\n8\n9"
   },
   {
-   "default": "2",
    "description": "If not set, the currency precision will depend on number format",
    "fieldname": "currency_precision",
    "fieldtype": "Select",
@@ -257,7 +257,7 @@
    "label": "Allow only one session per user"
   },
   {
-   "default": "1",
+   "default": "0",
    "description": "User can login using Email id or Mobile number",
    "fieldname": "allow_login_using_mobile_number",
    "fieldtype": "Check",
@@ -454,7 +454,7 @@
    "label": "Reports"
   },
   {
-   "default": "AL Baron Systems",
+   "default": "Frappe",
    "description": "The application name will be used in the Login page.",
    "fieldname": "app_name",
    "fieldtype": "Data",
@@ -478,7 +478,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "default": "1",
+   "default": "0",
    "fieldname": "disable_system_update_notification",
    "fieldtype": "Check",
    "label": "Disable System Update Notification"
@@ -793,17 +793,24 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "1",
+   "default": "0",
    "description": "Adds a clear (\u00d7) button to Link fields, allowing users to quickly remove the selected value.",
    "fieldname": "allow_clearing_link_fields",
    "fieldtype": "Check",
    "label": "Allow Clearing Link Fields"
+  },
+  {
+   "depends_on": "eval:doc.allow_guests_to_upload_files == 1",
+   "description": "Provide a list of allowed Doctypes for file uploads. Each line should contain one allowed Doctype. If unset, uploads to all doctypes are allowed. Example: <br>User<br>Item<br>Quotation",
+   "fieldname": "allowed_doctypes_for_guest_uploads",
+   "fieldtype": "Small Text",
+   "label": "Allowed Doctypes for Guest Uploads"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-06-02 11:25:55.973035",
+ "modified": "2026-05-21 10:32:53.594355",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

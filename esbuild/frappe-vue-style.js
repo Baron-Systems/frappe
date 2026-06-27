@@ -7,7 +7,6 @@ module.exports = {
 	setup(build) {
 		build.initialOptions.write = false;
 		build.onEnd((result) => {
-			if (!result.metafile || !result.metafile.outputs) return;
 			let files = get_files(result.metafile.outputs);
 			let keys = Object.keys(files);
 			for (let out of result.outputFiles) {

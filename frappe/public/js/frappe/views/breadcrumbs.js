@@ -275,11 +275,10 @@ frappe.breadcrumbs = {
 
 	clear() {
 		this.$breadcrumbs = $(".navbar-breadcrumbs").empty();
-		const app_logo_url = frappe.boot.app_logo_url || "/assets/frappe/images/frappe-framework-logo.svg";
-		const app_logo = `<img class="breadcrumb-app-logo" src="${app_logo_url}" alt="${__(
-			"Home"
-		)}" style="display:block;height:22px;width:auto;">`;
-		this.append_breadcrumb_element("/desk", app_logo);
+		let logo_html = frappe.boot.app_logo_url
+			? `<img src="${frappe.boot.app_logo_url}" style="height: 22px; width: 22px; vertical-align: middle; object-fit: contain;" alt="logo" />`
+			: frappe.utils.icon("grid");
+		this.append_breadcrumb_element("/desk", logo_html);
 	},
 
 	toggle(show) {

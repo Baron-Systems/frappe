@@ -135,9 +135,9 @@ export default class GridRow {
 					// else the object reference will be lost
 					data.splice(index, 1);
 				}
-				// remap idxs in reverse: top row gets highest number
+				// remap idxs
 				data.forEach(function (d, i) {
-					d.idx = data.length - i;
+					d.idx = i + 1;
 				});
 
 				this.grid.refresh();
@@ -145,10 +145,11 @@ export default class GridRow {
 		}
 	}
 	insert(show, below, duplicate) {
+		var idx = this.doc.idx;
 		var copy_doc = duplicate ? this.doc : null;
+		if (below) idx++;
 		this.toggle_view(false);
-		// With reverse numbering, always add at top (idx=1), never show form
-		this.grid.add_new_row(1, null, show, copy_doc, false, true);
+		this.grid.add_new_row(idx, null, show, copy_doc);
 	}
 	move() {
 		// prompt the user where they want to move this row
@@ -169,17 +170,12 @@ export default class GridRow {
 
 				// renumber and refresh
 				let data = me.grid.get_data();
-				// With reverse numbering: convert displayed idx to array index
-				// displayed idx = data.length - array_index
-				// array_index = data.length - displayed idx
-				let current_index = data.findIndex(d => d === me.doc);
-				let target_index = data.length - values.move_to;
-				data.move(current_index, target_index);
+				data.move(me.doc.idx - 1, values.move_to - 1);
 				me.frm.dirty();
 
-				// renum idx in reverse: top row gets highest number
+				// renum idx
 				for (let i = 0; i < data.length; i++) {
-					data[i].idx = data.length - i;
+					data[i].idx = i + 1;
 				}
 
 				me.toggle_view(false);
@@ -296,10 +292,12 @@ export default class GridRow {
 						delete this.grid.filter["row-index"];
 					}
 
-					this.grid.grid_sortable.option(
-						"disabled",
-						Object.keys(this.grid.filter).length !== 0
-					);
+					if (this.grid.grid_sortable) {
+						this.grid.grid_sortable.option(
+							"disabled",
+							Object.keys(this.grid.filter).length !== 0
+						);
+					}
 
 					this.grid.prevent_build = true;
 					me.grid.refresh();
@@ -794,6 +792,30 @@ export default class GridRow {
 			// last empty column
 			$(`<div class="col grid-static-col search"></div>`).appendTo(this.row);
 		}
+
+		// Button has no stored value; static_area stays empty while field_area is hidden until the row
+		// becomes "editable". Keep the control visible for Button columns in editable grids.
+		this.columns_list.forEach((column) => {
+			if (this.should_show_button_in_idle_grid_cell(column)) {
+				this.make_control(column);
+				column.static_area.toggle(false);
+				column.field_area.toggle(true);
+			}
+		});
+	}
+
+	/**
+	 * Button fields only: show the real control even when this row is not the active editable row.
+	 * Scope is intentionally narrow to avoid changing behaviour of value fields.
+	 */
+	should_show_button_in_idle_grid_cell(column) {
+		return (
+			column.df.fieldtype === "Button" &&
+			this.grid.allow_on_grid_editing() &&
+			this.grid.is_editable() &&
+			this.doc &&
+			!column.df.hidden
+		);
 	}
 
 	set_dependant_property(df) {
@@ -1114,9 +1136,9 @@ export default class GridRow {
 			$col.attr("tabIndex", 0);
 			$col.on("focus", function () {
 				if (me.grid.grid_rows.length == 0) {
-					me.grid.add_new_row(1, null, false);
+					me.grid.add_new_row();
 				}
-				me.grid.grid_rows[0].toggle_editable_row(true);
+				me.grid.grid_rows[me.grid.grid_rows.length - 1].toggle_editable_row(true);
 				me.grid.set_focus_on_row(0);
 				$col.attr("tabIndex", "");
 			});
@@ -1169,11 +1191,17 @@ export default class GridRow {
 					this.refresh_field(df.fieldname, txt);
 				}
 
-				if (!column.df.hidden) {
-					column.static_area.toggle(true);
-				}
+				if (this.should_show_button_in_idle_grid_cell(column)) {
+					this.make_control(column);
+					column.static_area.toggle(false);
+					column.field_area.toggle(true);
+				} else {
+					if (!column.df.hidden) {
+						column.static_area.toggle(true);
+					}
 
-				column.field_area && column.field_area.toggle(false);
+					column.field_area && column.field_area.toggle(false);
+				}
 			});
 			frappe.ui.form.editable_row = null;
 		}
@@ -1281,11 +1309,7 @@ export default class GridRow {
 				// ESC
 				if (e.which === ESCAPE && !e.shiftKey) {
 					if (me.doc.__unedited) {
-						// Find current row index and remove it
-						let current_index = me.grid.grid_rows.findIndex(r => r && r.doc === me.doc);
-						if (current_index >= 0) {
-							me.grid.grid_rows[current_index].remove();
-						}
+						me.grid.grid_rows[me.doc.idx - 1].remove();
 					}
 					return false;
 				}
@@ -1296,37 +1320,32 @@ export default class GridRow {
 					var is_last_column = $(this).attr("data-last-input") || last_column === this;
 
 					if (is_last_column) {
-						// Find current row index
-						let current_index = me.grid.grid_rows.findIndex(r => r && r.doc === me.doc);
-						// last row (bottom of the grid, index = length - 1)
-						if (current_index === values.length - 1) {
+						// last row
+						if (me.doc.idx === values.length) {
 							setTimeout(function () {
-								// Add at top (idx=1), don't show form
-								me.grid.add_new_row(1, null, false, null, false, true);
-								me.grid.set_focus_on_row(0);
+								me.grid.add_new_row(null, null, true);
+								me.grid.grid_rows[
+									me.grid.grid_rows.length - 1
+								].toggle_editable_row();
+								me.grid.set_focus_on_row();
 							}, 100);
 						} else {
 							// last column before last row
-							// With reverse numbering, next row is at current_index + 1
-							me.grid.grid_rows[current_index + 1].toggle_editable_row();
-							me.grid.set_focus_on_row(current_index + 1);
+							me.grid.grid_rows[me.doc.idx].toggle_editable_row();
+							me.grid.set_focus_on_row(me.doc.idx);
 							return false;
 						}
 					}
 				} else if (e.which === UP_ARROW) {
-					// With reverse numbering: UP = visually up = array index - 1 = higher idx
-					let current_index = me.grid.grid_rows.findIndex(r => r && r.doc === me.doc);
-					if (current_index > 0) {
-						var prev = me.grid.grid_rows[current_index - 1];
+					if (me.doc.idx > 1) {
+						var prev = me.grid.grid_rows[me.doc.idx - 2];
 						if (move_up_down(prev)) {
 							return false;
 						}
 					}
 				} else if (e.which === DOWN_ARROW) {
-					// With reverse numbering: DOWN = visually down = array index + 1 = lower idx
-					let current_index = me.grid.grid_rows.findIndex(r => r && r.doc === me.doc);
-					if (current_index < values.length - 1) {
-						var next = me.grid.grid_rows[current_index + 1];
+					if (me.doc.idx < values.length) {
+						var next = me.grid.grid_rows[me.doc.idx];
 						if (move_up_down(next)) {
 							return false;
 						}
@@ -1351,12 +1370,8 @@ export default class GridRow {
 	duplicate_row_using_keys() {
 		setTimeout(() => {
 			this.insert(false, true, true);
-			// Find the row index in grid_rows array, not the doc.idx
-			let row_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-			if (row_index >= 0 && this.grid.grid_rows[row_index + 1]) {
-				this.grid.grid_rows[row_index + 1].toggle_editable_row();
-				this.grid.set_focus_on_row(row_index + 1);
-			}
+			this.grid.grid_rows[this.doc.idx].toggle_editable_row();
+			this.grid.set_focus_on_row(this.doc.idx);
 		}, 100);
 	}
 
@@ -1368,22 +1383,25 @@ export default class GridRow {
 
 		// Add new row at the end or start of the table
 		if (ctrl_key && e.shiftKey) {
-			// Always add at top (idx=1), never show form
-			this.grid.add_new_row(1, null, false, null, false, true);
-			idx = 0; // Focus on first row (newly added)
+			idx = is_down_arrow_key_press ? null : 1;
+			this.grid.add_new_row(
+				idx,
+				null,
+				is_down_arrow_key_press,
+				false,
+				is_down_arrow_key_press,
+				!is_down_arrow_key_press
+			);
+			idx = is_down_arrow_key_press ? cint(this.grid.grid_rows.length) - 1 : 0;
 		} else if (ctrl_key) {
-			// Use array index instead of doc.idx for reverse numbering compatibility
-			let current_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-			idx = is_down_arrow_key_press ? current_index + 1 : current_index;
+			idx = is_down_arrow_key_press ? this.doc.idx : this.doc.idx - 1;
 			this.insert(false, is_down_arrow_key_press);
 		}
 
 		if (idx !== "") {
 			setTimeout(() => {
-				if (this.grid.grid_rows[idx]) {
-					this.grid.grid_rows[idx].toggle_editable_row();
-					this.grid.set_focus_on_row(idx);
-				}
+				this.grid.grid_rows[idx].toggle_editable_row();
+				this.grid.set_focus_on_row(idx);
 			}, 100);
 		}
 	}
@@ -1494,27 +1512,19 @@ export default class GridRow {
 		}
 	}
 	has_prev() {
-		// With reverse numbering: prev = visually above = higher idx
-		// Find current row index in grid_rows array
-		let current_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-		return current_index > 0;
+		return this.doc.idx > 1;
 	}
 	open_prev() {
 		if (!this.doc) return;
-		// With reverse numbering: prev = visually above = array index - 1
-		let current_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-		this.open_row_at_index(current_index - 1);
+		this.open_row_at_index(this.doc.idx - 2);
 	}
 	has_next() {
-		// With reverse numbering: next = visually below = lower idx
-		let current_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-		return current_index < this.grid.grid_rows.length - 1;
+		return this.doc.idx < this.grid.data.length;
 	}
 	open_next() {
 		if (!this.doc) return;
-		// With reverse numbering: next = visually below = array index + 1
-		let current_index = this.grid.grid_rows.findIndex(r => r && r.doc === this.doc);
-		this.open_row_at_index(current_index + 1);
+
+		this.open_row_at_index(this.doc.idx);
 	}
 	open_row_at_index(row_index) {
 		if (!this.grid.data[row_index]) return;

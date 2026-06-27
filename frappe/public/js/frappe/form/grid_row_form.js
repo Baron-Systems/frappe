@@ -92,24 +92,15 @@ export default class GridRowForm {
 			return false;
 		});
 		this.wrapper.find(".grid-insert-row").on("click", function () {
-			// Insert above current row, don't show form
-			me.row.insert(false);
-			// With reverse numbering, new row always at top (index 0)
-			me.row.grid.set_focus_on_row(0);
+			me.row.insert(true);
 			return false;
 		});
 		this.wrapper.find(".grid-insert-row-below").on("click", function () {
-			// Insert below current row, don't show form
-			me.row.insert(false, true);
-			// With reverse numbering, new row always at top (index 0)
-			me.row.grid.set_focus_on_row(0);
+			me.row.insert(true, true);
 			return false;
 		});
 		this.wrapper.find(".grid-duplicate-row").on("click", function () {
-			// Duplicate row, don't show form
-			me.row.insert(false, true, true);
-			// With reverse numbering, new row always at top (index 0)
-			me.row.grid.set_focus_on_row(0);
+			me.row.insert(true, true, true);
 			return false;
 		});
 		this.wrapper.find(".grid-move-row").on("click", function () {
@@ -118,9 +109,7 @@ export default class GridRowForm {
 		});
 		this.wrapper.find(".grid-append-row").on("click", function () {
 			me.row.toggle_view(false);
-			// Add at top (idx=1), don't show form
-			me.row.grid.add_new_row(1, null, false, null, false, true);
-			me.row.grid.set_focus_on_row(0);
+			me.row.grid.add_new_row(me.row.doc.idx + 1, null, true);
 			return false;
 		});
 		this.wrapper.find(".grid-form-heading, .grid-footer-toolbar").on("click", function () {
