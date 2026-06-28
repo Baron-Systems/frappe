@@ -16,6 +16,9 @@ from frappe.utils.frappecloud import on_frappecloud
 
 
 def get_change_log(user=None):
+	# Hard disabled: no change log notifications
+	return []
+
 	if not user:
 		user = frappe.session.user
 
@@ -177,8 +180,8 @@ def get_app_last_commit_ref(app):
 
 
 def check_for_update():
-	if frappe.get_system_settings("disable_system_update_notification") or not frappe.is_setup_complete():
-		return
+	# Hard disabled: no update checks
+	return
 
 	updates = frappe._dict(major=[], minor=[], patch=[])
 	apps = get_versions()
@@ -349,8 +352,8 @@ def add_message_to_redis(update_json):
 
 @frappe.whitelist()
 def show_update_popup():
-	if frappe.get_system_settings("disable_system_update_notification"):
-		return
+	# Hard disabled: no update popup
+	return
 	user = frappe.session.user
 
 	update_info = frappe.cache.get_value("changelog-update-info")

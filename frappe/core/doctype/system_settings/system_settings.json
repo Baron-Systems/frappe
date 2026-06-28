@@ -478,7 +478,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "disable_system_update_notification",
    "fieldtype": "Check",
    "label": "Disable System Update Notification"
@@ -504,7 +504,7 @@
    "label": "Max auto email report per user"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "disable_change_log_notification",
    "fieldtype": "Check",
    "label": "Disable Change Log Notification"
