@@ -793,7 +793,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "description": "Adds a clear (\u00d7) button to Link fields, allowing users to quickly remove the selected value.",
    "fieldname": "allow_clearing_link_fields",
    "fieldtype": "Check",
@@ -810,7 +810,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-06-27 19:57:13.167632",
+ "modified": "2026-06-30 14:24:14.114481",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
