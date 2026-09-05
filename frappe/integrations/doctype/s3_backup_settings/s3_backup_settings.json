@@ -10,10 +10,6 @@
   "access_key_id",
   "column_break_4",
   "secret_access_key",
-  "notification_section",
-  "notify_email",
-  "column_break_8",
-  "send_email_for_successful_backup",
   "s3_bucket_details_section",
   "bucket",
   "endpoint_url",
@@ -21,6 +17,8 @@
   "backup_path",
   "backup_details_section",
   "frequency",
+  "backup_time",
+  "backup_minute",
   "backup_files"
  ],
  "fields": [
@@ -31,27 +29,32 @@
    "label": "Enable Automatic Backup"
   },
   {
-   "fieldname": "notify_email",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Send Notifications To",
-   "mandatory_depends_on": "enabled",
-   "reqd": 1
-  },
-  {
-   "default": "1",
-   "description": "By default, emails are only sent for failed backups.",
-   "fieldname": "send_email_for_successful_backup",
-   "fieldtype": "Check",
-   "label": "Send Email for Successful Backup"
-  },
-  {
    "fieldname": "frequency",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Backup Frequency",
    "mandatory_depends_on": "enabled",
    "options": "Daily\nWeekly\nMonthly\nNone",
+   "reqd": 1
+  },
+  {
+   "default": "02",
+   "depends_on": "enabled",
+   "fieldname": "backup_time",
+   "fieldtype": "Select",
+   "label": "Backup Time (Hour)",
+   "mandatory_depends_on": "enabled",
+   "options": "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23",
+   "reqd": 1
+  },
+  {
+   "default": "00",
+   "depends_on": "enabled",
+   "fieldname": "backup_minute",
+   "fieldtype": "Select",
+   "label": "Backup Time (Minute)",
+   "mandatory_depends_on": "enabled",
+   "options": "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59",
    "reqd": 1
   },
   {
@@ -92,16 +95,6 @@
   },
   {
    "fieldname": "column_break_4",
-   "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "enabled",
-   "fieldname": "notification_section",
-   "fieldtype": "Section Break",
-   "label": "Notification"
-  },
-  {
-   "fieldname": "column_break_8",
    "fieldtype": "Column Break"
   },
   {

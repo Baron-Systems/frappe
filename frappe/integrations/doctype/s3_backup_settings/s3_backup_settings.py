@@ -2,13 +2,14 @@
 # License: MIT. See LICENSE
 import os
 import os.path
+from datetime import timedelta
 
 import boto3
 import frappe
 from botocore.exceptions import ClientError
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import cint, split_emails
+from frappe.utils import cint
 from frappe.utils.background_jobs import enqueue
 from rq.timeouts import JobTimeoutException
 
@@ -28,11 +29,34 @@ class S3BackupSettings(Document):
 		bucket: DF.Data
 		enabled: DF.Check
 		endpoint_url: DF.Data | None
+		backup_minute: DF.Literal["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"]
+		backup_time: DF.Literal["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 		frequency: DF.Literal["Daily", "Weekly", "Monthly", "None"]
-		notify_email: DF.Data
 		secret_access_key: DF.Password
-		send_email_for_successful_backup: DF.Check
 	# end: auto-generated types
+
+	def _get_secret_access_key(self):
+		"""Return secret_access_key, preferring a freshly-entered value.
+
+		If the user has typed a new secret access key in the current request, use it
+		directly. Otherwise fall back to the value stored in the __Auth table. If the
+		stored value cannot be decrypted with the current encryption_key, raise a
+		clear error asking the user to re-enter the secret.
+		"""
+		new_secret = self.get("secret_access_key")
+		if new_secret and not self.is_dummy_password(new_secret):
+			return new_secret
+
+		try:
+			return self.get_password("secret_access_key")
+		except frappe.ValidationError:
+			frappe.throw(
+				_(
+					"The stored Secret Access Key cannot be decrypted with the current encryption key. "
+					"Please re-enter the Secret Access Key in S3 Backup Settings."
+				),
+				title=_("Invalid Encryption Key"),
+			)
 
 	def validate(self):
 		if not self.enabled:
@@ -44,10 +68,26 @@ class S3BackupSettings(Document):
 		if self.backup_path and self.backup_path[-1] != "/":
 			self.backup_path += "/"
 
+		try:
+			secret_access_key = self._get_secret_access_key()
+		except frappe.ValidationError:
+			# Stored secret cannot be decrypted and no new value was provided.
+			# Reset the password field so the user can type a fresh key next time.
+			self.set("secret_access_key", None)
+			frappe.msgprint(
+				_(
+					"The stored Secret Access Key could not be decrypted and has been reset. "
+					"Please enter a new Secret Access Key and save again."
+				),
+				title=_("Secret Access Key Reset"),
+				indicator="orange",
+			)
+			return
+
 		conn = boto3.client(
 			"s3",
 			aws_access_key_id=self.access_key_id,
-			aws_secret_access_key=self.get_password("secret_access_key"),
+			aws_secret_access_key=secret_access_key,
 			endpoint_url=self.endpoint_url,
 		)
 
@@ -92,9 +132,87 @@ def take_backups_monthly():
 
 
 def take_backups_if(freq):
-	if cint(frappe.db.get_single_value("S3 Backup Settings", "enabled")):
-		if frappe.db.get_single_value("S3 Backup Settings", "frequency") == freq:
-			take_backups_s3()
+	# Kept for backwards compatibility; actual scheduling is handled by check_and_take_backups_s3.
+	check_and_take_backups_s3()
+
+
+def check_and_take_backups_s3():
+	"""Called by the scheduler every minute. Enqueues a backup only when the configured
+	hour, minute, and frequency match the current moment."""
+	if not cint(frappe.db.get_single_value("S3 Backup Settings", "enabled", cache=False)):
+		return
+
+	frequency = frappe.db.get_single_value("S3 Backup Settings", "frequency", cache=False) or "None"
+	if frequency == "None":
+		return
+
+	now = frappe.utils.now_datetime()
+	backup_time = str(frappe.db.get_single_value("S3 Backup Settings", "backup_time", cache=False) or "00").zfill(2)
+	backup_minute = str(frappe.db.get_single_value("S3 Backup Settings", "backup_minute", cache=False) or "00").zfill(2)
+
+	current_hour = str(now.hour).zfill(2)
+	current_minute = str(now.minute).zfill(2)
+
+	if (current_hour, current_minute) != (backup_time, backup_minute):
+		# Time does not match; no need to log every minute.
+		return
+
+	if frequency == "Weekly" and now.weekday() != 0:
+		frappe.log_error(
+			f"S3 Backup skipped: Weekly backups only run on Monday (now={now}).",
+			"S3 Backup Schedule",
+		)
+		return
+
+	if frequency == "Monthly" and now.day != 1:
+		frappe.log_error(
+			f"S3 Backup skipped: Monthly backups only run on 1st of month (now={now}).",
+			"S3 Backup Schedule",
+		)
+		return
+
+	take_backup()
+
+
+@frappe.whitelist()
+def get_next_backup_time():
+	"""Return the current server time and the next scheduled S3 backup time.
+
+	Used by the form to show a server clock and next backup, instead of a countdown.
+	"""
+	enabled = cint(frappe.db.get_single_value("S3 Backup Settings", "enabled", cache=False))
+	frequency = frappe.db.get_single_value("S3 Backup Settings", "frequency", cache=False) or "None"
+	if not enabled or frequency == "None":
+		return {"server_time": None, "next_backup": None}
+
+	now = frappe.utils.now_datetime()
+	backup_hour = int(frappe.db.get_single_value("S3 Backup Settings", "backup_time", cache=False) or "00")
+	backup_minute = int(frappe.db.get_single_value("S3 Backup Settings", "backup_minute", cache=False) or "00")
+
+	candidate = now.replace(hour=backup_hour, minute=backup_minute, second=0, microsecond=0)
+	if candidate <= now:
+		candidate += timedelta(days=1)
+
+	if frequency == "Weekly":
+		while candidate.weekday() != 0:
+			candidate += timedelta(days=1)
+	elif frequency == "Monthly":
+		if candidate.day != 1:
+			try:
+				candidate = candidate.replace(day=1)
+			except ValueError:
+				pass
+			candidate += timedelta(days=32)
+			candidate = candidate.replace(day=1)
+		else:
+			if candidate <= now:
+				candidate += timedelta(days=32)
+				candidate = candidate.replace(day=1)
+
+	return {
+		"server_time": now.strftime("%H:%M:%S"),
+		"next_backup": candidate.strftime("%Y-%m-%d %H:%M"),
+	}
 
 
 @frappe.whitelist()
@@ -102,7 +220,6 @@ def take_backups_s3(retry_count=0):
 	try:
 		validate_file_size()
 		backup_to_s3()
-		send_email(True, "Amazon S3", "S3 Backup Settings", "notify_email")
 	except JobTimeoutException:
 		if retry_count < 2:
 			args = {"retry_count": retry_count + 1}
@@ -113,14 +230,15 @@ def take_backups_s3(retry_count=0):
 				**args,
 			)
 		else:
-			notify()
+			frappe.log_error(
+				frappe.get_traceback(),
+				"S3 Backup Failed",
+			)
 	except Exception:
-		notify()
-
-
-def notify():
-	error_message = frappe.get_traceback()
-	send_email(False, "Amazon S3", "S3 Backup Settings", "notify_email", error_message)
+		frappe.log_error(
+			frappe.get_traceback(),
+			"S3 Backup Failed",
+		)
 
 
 def backup_to_s3():
@@ -135,7 +253,7 @@ def backup_to_s3():
 	conn = boto3.client(
 		"s3",
 		aws_access_key_id=doc.access_key_id,
-		aws_secret_access_key=doc.get_password("secret_access_key"),
+		aws_secret_access_key=doc._get_secret_access_key(),
 		endpoint_url=doc.endpoint_url or "https://s3.amazonaws.com",
 	)
 
@@ -320,39 +438,6 @@ def delete_local_backup_set(backups_path, timestamp_str):
 
 
 # Helper functions (from offsite_backup_utils)
-
-def send_email(success, service_name, doctype, email_field, error_status=None):
-	recipients = get_recipients(doctype, email_field)
-	if not recipients:
-		frappe.log_error(
-			f"No Email Recipient found for {service_name}",
-			f"{service_name}: Failed to send backup status email",
-		)
-		return
-
-	if success:
-		if not frappe.db.get_single_value(doctype, "send_email_for_successful_backup"):
-			return
-
-		subject = "Backup Upload Successful"
-		message = """
-<h3>Backup Uploaded Successfully!</h3>
-<p>Hi there, this is just to inform you that your backup was successfully uploaded to your {} bucket. So relax!</p>""".format(
-			service_name
-		)
-	else:
-		subject = "[Warning] Backup Upload Failed"
-		message = f"""
-<h3>Backup Upload Failed!</h3>
-<p>Oops, your automated backup to {service_name} failed.</p>
-<p>Error message: {error_status}</p>
-<p>Please contact your system manager for more information.</p>"""
-
-	frappe.sendmail(recipients=recipients, subject=subject, message=message)
-
-
-def get_recipients(doctype, email_field):
-	return split_emails(frappe.db.get_value(doctype, None, email_field))
 
 
 def get_latest_backup_file(with_files=False):
